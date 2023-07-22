@@ -1,0 +1,237 @@
+swagger: "2.0"
+info:
+  description: ""
+  version: "1.0.0"
+  title: "Aseyco - Technical Challengee - Architect"
+host: "localhost:8080"
+basePath: "/aseyco-test/v1"
+schemes:
+- "https"
+paths:
+  "/oauth/token":
+    post:
+      tags:
+      - "oauth-token-generation"
+      summary: "Token Generation - Authorization"
+      description: ""
+      operationId: "postTokenGeneration"
+      produces:
+      - "application/json"
+      responses:
+        200:
+          description: "OK Successful Operation"
+          schema: 
+            $ref: "#/definitions/response_tokenGeneration"
+        404:
+          description: 404 Not Found
+          schema:
+            $ref: '#/definitions/httpStatus_404'
+        500:
+          description: 500 Internal Server Error
+          schema:
+            $ref: '#/definitions/httpStatus_500'
+  "/company":
+    post:
+      tags:
+      - "save-company-data"
+      summary: "Save Company Data"
+      description: ""
+      operationId: "postCompanySave"
+      consumes:
+      - "application/json"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "Authorization"
+        in: "header"
+        required: true
+        type: "string"
+      - in: "body"
+        name: "body"
+        required: true
+        schema:
+          $ref: "#/definitions/request_Company"        
+      responses:
+        "204":
+          description: "OK Successful Operation [No Content]"
+          schema: 
+            $ref: "#/definitions/response_empty"
+        401:
+          description: 401 Unauthorized
+          schema:
+            $ref: '#/definitions/httpStatus_401'
+        404:
+          description: 404 Not Found
+          schema:
+            $ref: '#/definitions/httpStatus_404'
+        500:
+          description: 500 Internal Server Error
+          schema:
+            $ref: '#/definitions/httpStatus_500'
+    get:
+      tags:
+      - "get-company-data"
+      summary: "Get Company Data"
+      description: ""
+      operationId: "getCompany"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "Authorization"
+        in: "header"
+        required: true
+        type: "string"
+      - name: "ruc"
+        in: "query"
+        required: true
+        type: "string"     
+      responses:
+        200:
+          description: "OK Successful Operation"
+          schema: 
+            $ref: "#/definitions/response_getCompany"
+        401:
+          description: 401 Unauthorized
+          schema:
+            $ref: '#/definitions/httpStatus_401'
+        404:
+          description: 404 Not Found
+          schema:
+            $ref: '#/definitions/httpStatus_404'
+        500:
+          description: 500 Internal Server Error
+          schema:
+            $ref: '#/definitions/httpStatus_500'
+definitions:
+  httpStatus_400:
+    properties:
+      httpCode:
+        type: string
+        description: Código de estado http para request no válidos.
+        example: "400"
+      httpMessage:
+        type: string
+        description: Mensaje de estado http para Bad Request.
+        example: Bad Request
+    additionalProperties: false
+  httpStatus_401:
+    properties:
+      httpCode:
+        type: string
+        description: Código de estado http para request no autorizados.Posibles razones:-
+          No se enviaron las credenciales.- Credenciales incorrectas.- Las credenciales
+          enviadas no tienen permiso para consumir los servicios.
+        example: "401"
+      httpMessage:
+        type: string
+        description: Mensaje de estado http para Error de autorización.
+        example: Unauthorized
+    additionalProperties: false
+  httpStatus_404:
+    properties:
+      httpCode:
+        type: string
+        description: Código de estado http para error en la comunicación con el servidor.
+        example: "404"
+      httpMessage:
+        type: string
+        description: Mensaje de estado http por recurso no encontrado.
+        example: Not Found
+    additionalProperties: false
+  httpStatus_500:
+    properties:
+      httpCode:
+        type: string
+        description: Código de estado http para Internal Server Error.
+        example: "500"
+      httpMessage:
+        type: string
+        description: Mensaje de estado http para Internal Server Error.
+        example: Internal Server Error
+    additionalProperties: false
+  request_Company:
+    type: "object"
+    properties:
+      ruc:
+        type: "string"
+        example: "20600892470"
+      businessName: 
+        type: "string"
+        example: "SUPERDEPORTE PLUS PERU S.A.C."
+      status:
+        type: "string"
+        example: "ACTIVO"
+      address: 
+        type: "string"
+        example: "AV. LARCO 1301 301      LIMA LIMA  MIRAFLORES"
+      ubigeo:
+        type: "string"
+        example: "150122"
+      department: 
+        type: "string"
+        example: "LIMA"
+      province: 
+        type: "string"
+        example: "LIMA"
+      district: 
+        type: "string"
+        example: "MIRAFLORES"
+  response_empty:
+    type: "object"
+  response_tokenGeneration:
+    type: "object"
+    properties:
+      status:
+        type: "object"
+        properties:
+          code:
+            type: "string"
+            example: "0000"
+          message:
+            type: "string"
+            example: "Success"        
+      data: 
+        type: "object"
+        properties:
+          token:
+            type: "string"
+            example: "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ0ZWNobmljYWwtY2hhbGxlbmdlIiwibmJmIjoxNjkwMDM5NzM5LCJpc3MiOiJBc2V5Y28iLCJjbGFpbXMiOiJUZXN0IiwiZXhwIjoxNjkwMDQwMDM4LCJpYXQiOjE2OTAwMzk3MzgsImp0aSI6IjljYmNkODUzLTk4YjAtNDk2Ny05NGIxLTE3MDFjNzdkZjRhZSJ9.kpcDoCKzSCZmLtJFOlf88d38aN9WLD-Hn4pW4btaHVE"
+  response_getCompany:
+    type: "object"
+    properties:
+      status:
+        type: "object"
+        properties:
+          code:
+            type: "string"
+            example: "0000"
+          message:
+            type: "string"
+            example: "Success"
+      data: 
+        type: "object"
+        properties:
+          ruc:
+            type: "string"
+            example: "20600892470"
+          businessName: 
+            type: "string"
+            example: "SUPERDEPORTE PLUS PERU S.A.C."
+          status:
+            type: "string"
+            example: "ACTIVO"
+          address: 
+            type: "string"
+            example: "AV. LARCO 1301 301      LIMA LIMA  MIRAFLORES"
+          ubigeo:
+            type: "string"
+            example: "150122"
+          department: 
+            type: "string"
+            example: "LIMA"
+          province: 
+            type: "string"
+            example: "LIMA"
+          district: 
+            type: "string"
+            example: "MIRAFLORES"           

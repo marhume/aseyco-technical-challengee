@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<settings xmlns="http://maven.apache.org/SETTINGS/1.0.0"
+          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+          xsi:schemaLocation="http://maven.apache.org/SETTINGS/1.0.0 http://maven.apache.org/xsd/settings-1.0.0.xsd">
+    <servers>
+        <server>
+            <username>${env.user_artifactory}</username>
+            <password>${env.password_artifactory}</password>
+            <id>Jfrog Repository</id>
+        </server>
+    </servers>
+
+    <!-- The resolution of multiple Repositories only works with profiles!-->
+    <profiles>
+        <profile>
+            <id>multiple-repos</id>
+            <!--Request multiple Repositories for dependencies -->
+            <repositories>
+                <repository>
+                    <id>maven-repository</id>
+                    <name>Maven Repository</name>
+                    <url>https://repo.maven.apache.org/maven2/</url>
+                </repository>
+                <repository>
+                    <id>Jfrog Repository</id>
+                    <name>Jfrog Repository</name>
+                    <url>${env.url_artifactory}</url>
+                </repository>
+            </repositories>
+        </profile>
+    </profiles>
+
+    <activeProfiles>
+        <!--make the profile active all the time -->
+        <activeProfile>multiple-repos</activeProfile>
+    </activeProfiles>
+</settings>
